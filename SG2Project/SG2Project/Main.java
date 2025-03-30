@@ -48,6 +48,7 @@ public class Main {
         int numDates = 0;
         double max = 0;
         Scanner scanner = new Scanner(System.in);
+        List<String> dates = new ArrayList<>();
 
         if (!file.exists() || !file.isFile()) {
             System.out.println("Error: File not found or incorrect directory.");
@@ -71,21 +72,19 @@ public class Main {
             }
 
             //Only first line is read for species
-            if (lineNumber == 1) 
+            FileWriter species = new FileWriter("Species.txt");
+            String[] speciesList = line.substring(1).split(",");
+            numSpecies = speciesList.length;
+            System.out.println(Arrays.toString(speciesList));
+            BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
+            for (String specie : speciesList)
             {
-                FileWriter species = new FileWriter("Species.txt");
-                String[] speciesList = line.substring(1).split(",");
-                numSpecies = speciesList.length;
-                System.out.println(Arrays.toString(speciesList));
-                BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
-                for (String specie : speciesList) 
-                {
-                    speciesWriter.write(specie);
-                    speciesWriter.newLine();
-                }
-                speciesWriter.close();
-                species.close();
+                speciesWriter.write(specie);
+                speciesWriter.newLine();
             }
+            speciesWriter.close();
+            species.close();
+
             //Read the rest of the lines until the line is empty or null 
             while ((line = reader.readLine()) != null) 
             {
@@ -194,6 +193,8 @@ public class Main {
             System.out.println("Number of dates found: " + numDates);
             promptUserEnterKey(scanner);
         }
+        dateWriter.close();
+        presentAbsentWriter.close();
         return true;
     }
 }
