@@ -106,9 +106,15 @@ public class Main {
                     }
 
                     // validates that numbers provided are equal to species column
+                    // numbers provided should be equal to species provided minus 1 (date column)
                     if ((dateList.length - 1) != numSpecies) {
                         System.out.println("Row count is invalid at line: " + lineNumber);
                         System.out.println("Line Content: " + line);
+
+                        System.out.println("Press Enter to continue...");
+                        scanner.nextLine();
+                        scanner.close();
+
                         return false;
                     }
 
