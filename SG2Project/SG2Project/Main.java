@@ -13,6 +13,11 @@ public class Main {
         String fileUser = consoleScanner.nextLine();
         validateInput(fileUser, consoleScanner);
     }
+
+    public static void promptUserEnterKey(Scanner s) {
+        System.out.println("Press Enter to continue...");
+        s.nextLine();
+    }
     
     // This function is for making sure that the file being inputed matches the correct format
     public static void validateInput(String fileUser, Scanner consoleScanner) throws IOException {
@@ -40,7 +45,9 @@ public class Main {
         // Used for keeping track of what line the program is reading
         int lineNumber = 0;
         int numSpecies = 0;
+        int numDates = 0;
         double max = 0;
+        Scanner scanner = new Scanner(System.in);
 
         if (!file.exists() || !file.isFile()) {
             System.out.println("Error: File not found or incorrect directory.");
@@ -100,7 +107,58 @@ public class Main {
                         System.out.println("The dates must be in MM/DD/YYYY format at line " + lineNumber);
                         return false;
                     }
-                    
+
+                    // validates that numbers provided are equal to species column
+                    // numbers provided should be equal to species provided minus 1 (date column)
+                    if ((dateList.length - 1) != numSpecies) {
+                        System.out.println("Row count is invalid at line: " + lineNumber);
+                        System.out.println("Line Content: " + line);
+
+                        promptUserEnterKey(scanner);
+                        return false;
+                    }
+
+                    for (int x = 1; x < dateList.length; x++) {
+                        // checks if number provided contains alphabet character
+                        if (dateList[x].matches(".*[a-zA-Z].*")) {
+                            System.out.println("Content provided contains alphabet character at line: " + lineNumber);
+                            System.out.println("Invalid Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            promptUserEnterKey(scanner);
+                            return false;
+                        }
+                        // checks if number provided is real number
+                        if (!dateList[x].matches("^[-+]?(?:\\d+(\\.\\d*)?|\\d+/\\d+)$")) {
+                            System.out.println("Content provided not a valid number at line: " + lineNumber);
+                            System.out.println("Invalid Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            promptUserEnterKey(scanner);
+                            return false;
+                        }
+                        // checks if number provided is a fraction
+                        if (dateList[x].contains("/")) {
+                            System.out.println("Content provided is a fraction at line: " + lineNumber);
+                            System.out.println("Invalid Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            promptUserEnterKey(scanner);
+                            return false;
+                        }
+                        // checks if number provided is negative
+                        if (Double.parseDouble(dateList[x]) < 0) {
+                            System.out.println("Content provided is negative at line: " + lineNumber);
+                            System.out.println("Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            promptUserEnterKey(scanner);
+                            return false;
+                        }
+                    }
+                    // if numbers are valid then add to dates found count
+                    numDates++;
+
                     //List that stores converted values to 1's and 0's
 
                     //TODO PresentAbsent portion needs to be reworked into the way that is being asked for in the project. It needs to be set as an array type data structure rather than written to the file immediately
@@ -127,6 +185,14 @@ public class Main {
                     presentAbsentWriter.newLine();
                 }
             }
+            /*
+            SG2 should output a message to the screen announcing how many different species (names) were found
+            in the file, and how many different dates were found. The user should be prompted to push ENTER to
+            continue the program
+             */
+            System.out.println("Number of different species(names) found: " + numSpecies);
+            System.out.println("Number of dates found: " + numDates);
+            promptUserEnterKey(scanner);
         }
         return true;
     }
