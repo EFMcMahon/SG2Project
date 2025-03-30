@@ -151,7 +151,7 @@ public class Main {
                             return false;
                         }
                         // checks if number provided is negative
-                        if (Integer.parseInt(dateList[x]) < 0) {
+                        if (Double.parseDouble(dateList[x]) < 0) {
                             System.out.println("Content provided is negative at line: " + lineNumber);
                             System.out.println("Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
