@@ -103,20 +103,28 @@ public class Main {
                         return false;
                     }
 
-                    int numCount = 0;
-                    for (int x = 1; x < dateList.length; x++)
+                    for (int x = 1; x < numSpecies + 1; x++)
                     {
-                        // validate numbers
-                        if (!dateList[x].matches("^(\\d+(\\.\\d+)?|\\.\\d+)$")) {
-                            System.out.println("Content provided is not valid at line: " + lineNumber + ", Invalid content: " + dateList[x]);
+                        // checks if N contains alphabet character
+                        if (dateList[x].matches(".*[a-zA-Z].*")) {
+                            System.out.println("Content provided contains alphabet character at line: " + lineNumber);
+                            System.out.println("Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
                             return false;
                         }
-                        numCount++;
-                    }
+                        if (dateList[x].contains("/")) {
+                            System.out.println("Content provided contains special character '/' at line: " + lineNumber);
+                            System.out.println("Content: " + line);
+                            return false;
+                        }
+                        if (dateList[x].contains("-")) {
+                            System.out.println("Content provided contains special character '-' at line: " + lineNumber);
+                            System.out.println("Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+                            return false;
+                        }
 
-                    if (numCount != numSpecies) {
-                        System.out.println("Invalid Row Length at line: " + lineNumber);
-                        return false;
+
                     }
                     
                     //List that stores converted values to 1's and 0's
