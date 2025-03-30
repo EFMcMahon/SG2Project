@@ -100,6 +100,7 @@ public class Main {
         int numDates = 0;
         double max = 0;
         Scanner scanner = new Scanner(System.in);
+        List<String> dates = new ArrayList<>();
 
 
         System.out.println(file.exists());
@@ -125,20 +126,18 @@ public class Main {
             }
 
             //Only first line is read for species
-        
-                FileWriter species = new FileWriter("Species.txt");
-                String[] speciesList = line.substring(1).split(",");
-                numSpecies = speciesList.length;
-                System.out.println(Arrays.toString(speciesList));
-                BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
-                for (String specie : speciesList) 
-                {
-                    speciesWriter.write(specie);
-                    speciesWriter.newLine();
-                }
-                speciesWriter.close();
-                species.close();
-        
+            FileWriter species = new FileWriter("Species.txt");
+            String[] speciesList = line.substring(1).split(",");
+            numSpecies = speciesList.length;
+            System.out.println(Arrays.toString(speciesList));
+            for (String specie : speciesList)
+            {
+                speciesWriter.write(specie);
+                speciesWriter.newLine();
+            }
+            speciesWriter.close();
+            species.close();
+          
             //Read the rest of the lines until the line is empty or null 
             while ((line = reader.readLine()) != null) 
             {
@@ -168,37 +167,18 @@ public class Main {
                         System.out.println("Row count is invalid at line: " + lineNumber);
                         System.out.println("Line Content: " + line);
 
-<<<<<<< HEAD
-                        System.out.println("Press Enter to continue...");
-                        scanner.nextLine();
-                        scanner.close();
-
-                        return false;
-                    }
-
-                    for (int x = 1; x < dateList.length; x++)
-                    {
-=======
                         promptUserEnterKey(scanner);
                         return false;
                     }
 
                     for (int x = 1; x < dateList.length; x++) {
->>>>>>> 18f3eff77cfe5882334f7764e75ed781019377d5
                         // checks if number provided contains alphabet character
                         if (dateList[x].matches(".*[a-zA-Z].*")) {
                             System.out.println("Content provided contains alphabet character at line: " + lineNumber);
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-<<<<<<< HEAD
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
-=======
                             promptUserEnterKey(scanner);
->>>>>>> 18f3eff77cfe5882334f7764e75ed781019377d5
                             return false;
                         }
                         // checks if number provided is real number
@@ -207,14 +187,7 @@ public class Main {
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-<<<<<<< HEAD
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
-=======
                             promptUserEnterKey(scanner);
->>>>>>> 18f3eff77cfe5882334f7764e75ed781019377d5
                             return false;
                         }
                         // checks if number provided is a fraction
@@ -223,14 +196,7 @@ public class Main {
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-<<<<<<< HEAD
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
-=======
                             promptUserEnterKey(scanner);
->>>>>>> 18f3eff77cfe5882334f7764e75ed781019377d5
                             return false;
                         }
                         // checks if number provided is negative
@@ -239,17 +205,6 @@ public class Main {
                             System.out.println("Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-<<<<<<< HEAD
-                            System.out.print("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-                            return false;
-                        }
-                    }
-
-
-                    
-=======
                             promptUserEnterKey(scanner);
                             return false;
                         }
@@ -257,7 +212,6 @@ public class Main {
                     // if numbers are valid then add to dates found count
                     numDates++;
 
->>>>>>> 18f3eff77cfe5882334f7764e75ed781019377d5
                     //List that stores converted values to 1's and 0's
 
                     //TODO PresentAbsent portion needs to be reworked into the way that is being asked for in the project. It needs to be set as an array type data structure rather than written to the file immediately
@@ -293,6 +247,8 @@ public class Main {
             System.out.println("Number of dates found: " + numDates);
             promptUserEnterKey(scanner);
         }
+        dateWriter.close();
+        presentAbsentWriter.close();
         return true;
     }
 }
