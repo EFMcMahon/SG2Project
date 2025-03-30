@@ -38,10 +38,12 @@ public class Main {
     public static boolean processCSV(File file) throws IOException
     {
         // Used for keeping track of what line the program is reading
-        int lineNumber = 0;
+        int lineNumber = 1;
         int numSpecies = 0;
         double max = 0;
 
+        System.out.println(file.exists());
+        System.out.println(file.isFile());
         if (!file.exists() || !file.isFile()) {
             System.out.println("Error: File not found or incorrect directory.");
             return false;
@@ -56,7 +58,6 @@ public class Main {
         {
             String line;
             line = reader.readLine();
-            lineNumber++;
             char commaCheck = line.charAt(0);
             if (commaCheck != ',') {
                 System.out.println("The first character in the file must be ','.");
@@ -82,6 +83,7 @@ public class Main {
             //Read the rest of the lines until the line is empty or null 
             while ((line = reader.readLine()) != null) 
             {
+                lineNumber++;
                 double highestAbd = 0;
                 if (line.trim().isEmpty()) 
                 {
@@ -98,6 +100,22 @@ public class Main {
                         dateWriter.newLine();
                     } else {
                         System.out.println("The dates must be in MM/DD/YYYY format at line " + lineNumber);
+                        return false;
+                    }
+
+                    int numCount = 0;
+                    for (int x = 1; x < dateList.length; x++)
+                    {
+                        // validate numbers
+                        if (!dateList[x].matches("^(\\d+(\\.\\d+)?|\\.\\d+)$")) {
+                            System.out.println("Content provided is not valid at line: " + lineNumber + ", Invalid content: " + dateList[x]);
+                            return false;
+                        }
+                        numCount++;
+                    }
+
+                    if (numCount != numSpecies) {
+                        System.out.println("Invalid Row Length at line: " + lineNumber);
                         return false;
                     }
                     
