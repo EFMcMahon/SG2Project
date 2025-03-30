@@ -130,7 +130,6 @@ public class Main {
             String[] speciesList = line.substring(1).split(",");
             numSpecies = speciesList.length;
             System.out.println(Arrays.toString(speciesList));
-            BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
             for (String specie : speciesList)
             {
                 speciesWriter.write(specie);
