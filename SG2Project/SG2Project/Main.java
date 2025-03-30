@@ -1,3 +1,52 @@
+/*
+Language: Java
+IDE: IntellJ, Visual Studio Code, netbeans
+- - - - - - - - - - - - - - - - - - - -
+Group: Randy Vo, Eric McMahon,  Joe Mugo 
+Date: 04/2/2025
+Class: CS 4500-001
+- - - - - - - - - - - - - - - - - - - -
+[Program Description:]
+Assignment: Small Group Project 2
+Description: This Java program reads a CSV file provided by the user and extracts the following information:
+1. ** Extract Species (Names) **:
+    - Reads the first line of the CSV file to get the names and number of names (abundance count).
+    - Writes the column names to a file named 'Species.txt'.
+
+2. ** Extracts Dates**:
+    - Reads the dates from the first column of each subsequent line in the CSV file.
+    - Writes the dates to a file named 'DatedData.txt'.
+
+3. **Processes Numeric Data**:
+    - Reads the numeric data from the remaining columns of each line.
+    - Converts positive numbers to '1' and zero to '0'.
+    - Writes the converted data to a file named 'PresentAbsent.txt'.
+- - - - - - - - - - - - - - - - - - - -
+[Sources:]
+   - BufferedWriter: https://www.programiz.com/java-programming/bufferedwriter, https://www.geeksforgeeks.org/io-bufferedwriter-class-methods-java/
+   - BufferedReader: https://www.programiz.com/java-programming/bufferedreader, https://www.geeksforgeeks.org/bufferedreader-class-in-java/
+   - FileReader: https://www.geeksforgeeks.org/file-reader-java-with-examples/
+   - FileWriter: https://www.geeksforgeeks.org/filewriter-class-in-java-with-examples/
+   - IOException: https://www.geeksforgeeks.org/handle-an-ioexception-in-java/
+   - FileNotFoundException: https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html
+   - toLowerCase().endsWith(".csv") : https://stackoverflow.com/questions/26794275/how-do-i-ignore-case-when-using-startswith-and-endswith-in-java
+   - split(“,“) function: https://www.geeksforgeeks.org/split-string-java-examples/
+   - pathname: https://stackoverflow.com/questions/1693020/how-to-specify-filepath-in-java
+- - - - - - - - - - - - - - - - - - - -
+[How to Run:]
+1. Import all the java library below.
+2. Add ".CSV" file to the same root directory as the java program.
+3. Run the Java program using the following command:
+    'java SG2'
+or pressing the run button/green triangle above.
+4. Follow the on-screen instructions to enter the name of the CSV file.
+5. The program will process the CSV file and generate the output files:
+    - 'Species.txt'
+    - 'DatedData.txt'
+    - 'PresentAbsent.txt'
+- - - - - - - - - - - - - - - - - - - -
+*/
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,52 +70,57 @@ public class Main {
     
     // This function is for making sure that the file being inputed matches the correct format
     public static void validateInput(String fileUser, Scanner consoleScanner) throws IOException {
-        fileUser = fileUser.toUpperCase();
-        if (fileUser.length() < 4) {
-            System.out.println("The file must be at least 5 characters including \".CSV\" as a suffix.");
+        while (true) {
+            fileUser = fileUser.trim();
+
+            if (fileUser.length() < 4 || !fileUser.toLowerCase().endsWith(".csv")) {
+                System.out.println("Please input a valid CSV file name ending with .CSV");
+            } else {
+                File file = new File(fileUser);
+                if (!file.exists() || !file.isFile()) {
+                    System.out.println("File not found. Please input another file:");
+                } else {
+                    
+                    processCSV(file);
+                    return; 
+                }
+            }
+
+            // Ask for input again
             fileUser = consoleScanner.nextLine();
-            validateInput(fileUser, consoleScanner);
-        } else if (!fileUser.substring(fileUser.length() - 4).contains(".CSV")) {
-            System.out.println("Please input a CSV file. It must have \".CSV\" as a suffix.");
-            fileUser = consoleScanner.nextLine();
-            validateInput(fileUser, consoleScanner);
-        } else if (((fileUser.length() - 4) == 0)) {
-            System.out.println("Please input a CSV file. It must have more characters than just \".CSV\"");
-            fileUser = consoleScanner.nextLine();
-            validateInput(fileUser, consoleScanner);
-        } else { // This else is ran if the csv passes all validation checks
-            File file = new File(fileUser);
-            processCSV(file);
         }
     }
+    
 
-    public static boolean processCSV(File file) throws IOException
-    {
+    public static boolean processCSV(File file) throws IOException {
+    
         // Used for keeping track of what line the program is reading
-        int lineNumber = 0;
+        int lineNumber = 1;
         int numSpecies = 0;
         int numDates = 0;
         double max = 0;
         Scanner scanner = new Scanner(System.in);
         List<String> dates = new ArrayList<>();
 
+
+        System.out.println(file.exists());
+        System.out.println(file.isFile());
         if (!file.exists() || !file.isFile()) {
             System.out.println("Error: File not found or incorrect directory.");
             return false;
         }
 
-        // BufferedWriters for Dated.Data and PresentAbsent
+        // BufferedWriters for DatedData, PresentAbsent and species
+        BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
         BufferedWriter dateWriter = new BufferedWriter(new FileWriter("DatedData.txt"));
         BufferedWriter presentAbsentWriter = new BufferedWriter(new FileWriter("PresentAbsent.txt"));
 
         //Reads file line by line
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) 
-        {
-            String line;
-            line = reader.readLine();
-            lineNumber++;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        
+            String line = reader.readLine();
             char commaCheck = line.charAt(0);
-            if (commaCheck != ',') {
+            if (commaCheck != ',' || line == null) {
                 System.out.println("The first character in the file must be ','.");
                 return false;
             }
@@ -84,10 +138,11 @@ public class Main {
             }
             speciesWriter.close();
             species.close();
-
+          
             //Read the rest of the lines until the line is empty or null 
             while ((line = reader.readLine()) != null) 
             {
+                lineNumber++;
                 double highestAbd = 0;
                 if (line.trim().isEmpty()) 
                 {
