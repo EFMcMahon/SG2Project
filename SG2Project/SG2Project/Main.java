@@ -13,6 +13,12 @@ public class Main {
         String fileUser = consoleScanner.nextLine();
         validateInput(fileUser, consoleScanner);
     }
+
+    public static void promptUserEnterKey(Scanner s) {
+        System.out.println("Press Enter to continue...");
+        s.nextLine();
+//        s.close();
+    }
     
     // This function is for making sure that the file being inputed matches the correct format
     public static void validateInput(String fileUser, Scanner consoleScanner) throws IOException {
@@ -40,6 +46,7 @@ public class Main {
         // Used for keeping track of what line the program is reading
         int lineNumber = 1;
         int numSpecies = 0;
+        int numDates = 0;
         double max = 0;
         Scanner scanner = new Scanner(System.in);
 
@@ -111,10 +118,7 @@ public class Main {
                         System.out.println("Row count is invalid at line: " + lineNumber);
                         System.out.println("Line Content: " + line);
 
-                        System.out.println("Press Enter to continue...");
-                        scanner.nextLine();
-                        scanner.close();
-
+                        promptUserEnterKey(scanner);
                         return false;
                     }
 
@@ -126,10 +130,7 @@ public class Main {
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
+                            promptUserEnterKey(scanner);
                             return false;
                         }
                         // checks if number provided is real number
@@ -138,10 +139,7 @@ public class Main {
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
+                            promptUserEnterKey(scanner);
                             return false;
                         }
                         // checks if number provided is a fraction
@@ -150,10 +148,7 @@ public class Main {
                             System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-                            System.out.println("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
-
+                            promptUserEnterKey(scanner);
                             return false;
                         }
                         // checks if number provided is negative
@@ -162,12 +157,12 @@ public class Main {
                             System.out.println("Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
 
-                            System.out.print("Press Enter to continue...");
-                            scanner.nextLine();
-                            scanner.close();
+                            promptUserEnterKey(scanner);
                             return false;
                         }
                     }
+                    // if numbers are valid then add to dates found count
+                    numDates++;
 
 
                     
@@ -197,6 +192,15 @@ public class Main {
                     presentAbsentWriter.newLine();
                 }
             }
+            /*
+            SG2 should output a message to the screen announcing how many different species (names) were found
+            in the file, and how many different dates were found. The user should be prompted to push ENTER to
+            continue the program
+             */
+            System.out.println("Number of different species(names) found: " + numSpecies);
+            System.out.println("Number of dates found: " + numDates);
+            promptUserEnterKey(scanner);
+
         }
         return true;
     }
