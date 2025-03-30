@@ -41,6 +41,8 @@ public class Main {
         int lineNumber = 1;
         int numSpecies = 0;
         double max = 0;
+        Scanner scanner = new Scanner(System.in);
+
 
         System.out.println(file.exists());
         System.out.println(file.isFile());
@@ -103,28 +105,66 @@ public class Main {
                         return false;
                     }
 
-                    for (int x = 1; x < numSpecies + 1; x++)
+                    // keeps track of how many numbers are in row
+                    int rowNumCount = 0;
+                    for (int x = 1; x < dateList.length; x++)
                     {
-                        // checks if N contains alphabet character
+                        // checks if number provided contains alphabet character
                         if (dateList[x].matches(".*[a-zA-Z].*")) {
                             System.out.println("Content provided contains alphabet character at line: " + lineNumber);
-                            System.out.println("Content: " + dateList[x]);
+                            System.out.println("Invalid Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
+
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                            scanner.close();
+
                             return false;
                         }
+                        // checks if number provided is real number
+                        if (!dateList[x].matches("^[-+]?(?:\\d+(\\.\\d*)?|\\d+/\\d+)$")) {
+                            System.out.println("Content provided not a valid number at line: " + lineNumber);
+                            System.out.println("Invalid Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                            scanner.close();
+
+                            return false;
+                        }
+                        // checks if number provided is a fraction
                         if (dateList[x].contains("/")) {
-                            System.out.println("Content provided contains special character '/' at line: " + lineNumber);
-                            System.out.println("Content: " + line);
+                            System.out.println("Content provided is a fraction at line: " + lineNumber);
+                            System.out.println("Invalid Content: " + dateList[x]);
+                            System.out.println("Line Content: " + line);
+
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                            scanner.close();
+
                             return false;
                         }
-                        if (dateList[x].contains("-")) {
-                            System.out.println("Content provided contains special character '-' at line: " + lineNumber);
+                        // checks if number provided is negative
+                        if (Integer.parseInt(dateList[x]) < 0) {
+                            System.out.println("Content provided is negative at line: " + lineNumber);
                             System.out.println("Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
+
+                            System.out.print("Press Enter to continue...");
+                            scanner.nextLine();
+                            scanner.close();
                             return false;
                         }
+                        // adds to row count when number is valid
+                        rowNumCount++;
+                    }
 
-
+                    // validates that row number count is equal to species row number count
+                    if (rowNumCount != numSpecies) {
+                        System.out.println("Row count is invalid at line: " + lineNumber);
+                        System.out.println("Line Content: " + line);
+                        return false;
                     }
                     
                     //List that stores converted values to 1's and 0's
