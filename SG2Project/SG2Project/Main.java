@@ -105,8 +105,13 @@ public class Main {
                         return false;
                     }
 
-                    // keeps track of how many numbers are in row
-                    int rowNumCount = 0;
+                    // validates that numbers provided are equal to species column
+                    if ((dateList.length - 1) != numSpecies) {
+                        System.out.println("Row count is invalid at line: " + lineNumber);
+                        System.out.println("Line Content: " + line);
+                        return false;
+                    }
+
                     for (int x = 1; x < dateList.length; x++)
                     {
                         // checks if number provided contains alphabet character
@@ -156,16 +161,9 @@ public class Main {
                             scanner.close();
                             return false;
                         }
-                        // adds to row count when number is valid
-                        rowNumCount++;
                     }
 
-                    // validates that row number count is equal to species row number count
-                    if (rowNumCount != numSpecies) {
-                        System.out.println("Row count is invalid at line: " + lineNumber);
-                        System.out.println("Line Content: " + line);
-                        return false;
-                    }
+
                     
                     //List that stores converted values to 1's and 0's
 
