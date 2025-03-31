@@ -48,10 +48,7 @@ or pressing the run button/green triangle above.
 */
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -256,6 +253,7 @@ public class Main {
 //                    presentAbsentWriter.newLine();
                 }
             }
+            presentAbsentWriter.write(",");
             for (List<String> row : PA) {
                 presentAbsentWriter.write(String.join(",", row));
                 presentAbsentWriter.newLine();
@@ -271,6 +269,36 @@ public class Main {
         }
         dateWriter.close();
         presentAbsentWriter.close();
+
+        // Generate Report
+        Map<String, List<String>> reportDate = new HashMap<>();
+        int p = 0;
+        for (List<String> row : PA) {
+            if (p != 0) {
+                // skip species row
+                // key is numbers provided
+                StringBuilder key = new StringBuilder();
+                for (int r = 1; r < row.size(); r++) {
+                    key.append(row.get(r));
+                }
+                if (!reportDate.containsKey(key.toString())) {
+                    reportDate.put(key.toString(), new ArrayList<>(List.of(row.getFirst())));
+                } else {
+                    List<String> dates = reportDate.get(key.toString());
+                    dates.add(row.getFirst());
+                }
+            }
+            p++;
+        }
+
+        for (String key : reportDate.keySet()) {
+            int maxAbSize = reportDate.get(key).size();
+            if (maxAbSize > 1) {
+                System.out.print(key + " occurs " + maxAbSize + " times: ");
+                System.out.println(String.join(", ", reportDate.get(key)));
+            }
+        }
+
         return true;
     }
 }
