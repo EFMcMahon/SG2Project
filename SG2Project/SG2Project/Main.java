@@ -100,7 +100,13 @@ public class Main {
         int numDates = 0;
         double max = 0;
         Scanner scanner = new Scanner(System.in);
-        List<String> dates = new ArrayList<>();
+        // PA Data Structure to hold PresentAbsent Data
+        /*
+        This data structure is a list of list,
+        the outer list holds another list that represents rows in PresentAbsent
+        the inside list holds each item in that row (date & numbers)
+         */
+        List<List<String>> PA = new ArrayList<>();
 
 
         System.out.println(file.exists());
@@ -137,11 +143,13 @@ public class Main {
             }
             speciesWriter.close();
             species.close();
+            PA.add(List.of(speciesList));
           
             //Read the rest of the lines until the line is empty or null 
             while ((line = reader.readLine()) != null) 
             {
                 lineNumber++;
+                List<String> lineHolder = new ArrayList<>();
                 double highestAbd = 0;
                 if (line.trim().isEmpty()) 
                 {
@@ -156,6 +164,7 @@ public class Main {
                     if (dateList[0].matches("^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$")) {
                         dateWriter.write(dateList[0]);
                         dateWriter.newLine();
+                        lineHolder.add(dateList[0]);
                     } else {
                         System.out.println("The dates must be in MM/DD/YYYY format at line " + lineNumber);
                         return false;
@@ -200,7 +209,8 @@ public class Main {
                             return false;
                         }
                         // checks if number provided is negative
-                        if (Double.parseDouble(dateList[x]) < 0) {
+                        double dateListValue = Double.parseDouble(dateList[x]);
+                        if (dateListValue < 0) {
                             System.out.println("Content provided is negative at line: " + lineNumber);
                             System.out.println("Content: " + dateList[x]);
                             System.out.println("Line Content: " + line);
@@ -208,35 +218,47 @@ public class Main {
                             promptUserEnterKey(scanner);
                             return false;
                         }
+                        // abundance count logic
+                        if (dateListValue == 0) {
+                            lineHolder.add("0");
+                        }
+                        if (dateListValue > 0) {
+                            lineHolder.add("1");
+                        }
                     }
                     // if numbers are valid then add to dates found count
                     numDates++;
+                    PA.add(lineHolder);
 
                     //List that stores converted values to 1's and 0's
 
                     //TODO PresentAbsent portion needs to be reworked into the way that is being asked for in the project. It needs to be set as an array type data structure rather than written to the file immediately
-                    List<String> presentAbsentList = new ArrayList<>();
-                    // Adds values to the presentAbsentList based on corresponding data from the CSV
-                    for (int i = 1; i < dateList.length; i++) 
-                    {
-                        String value = dateList[i].trim();
-                        if (!value.isEmpty() && Double.parseDouble(value) > 0) 
-                        {
-                            double num = Double.parseDouble(value);
-                            if (num > max)
-                            {
-                                max = num;
-                            }
-                            presentAbsentList.add(num != 0 ? "1" : "0");
-                        } else if (Double.parseDouble(value) < 0) {
-                            System.out.println("The file can not contain negative numbers.");
-                            return false;
-                        }
-                    }
-                    //joins values with commas and write to presentabsent
-                    presentAbsentWriter.write(String.join(", ", presentAbsentList));
-                    presentAbsentWriter.newLine();
+//                    List<String> presentAbsentList = new ArrayList<>();
+//                    // Adds values to the presentAbsentList based on corresponding data from the CSV
+//                    for (int i = 1; i < dateList.length; i++)
+//                    {
+//                        String value = dateList[i].trim();
+//                        if (!value.isEmpty() && Double.parseDouble(value) > 0)
+//                        {
+//                            double num = Double.parseDouble(value);
+//                            if (num > max)
+//                            {
+//                                max = num;
+//                            }
+//                            presentAbsentList.add(num != 0 ? "1" : "0");
+//                        } else if (Double.parseDouble(value) < 0) {
+//                            System.out.println("The file can not contain negative numbers.");
+//                            return false;
+//                        }
+//                    }
+//                    //joins values with commas and write to presentabsent
+//                    presentAbsentWriter.write(String.join(", ", presentAbsentList));
+//                    presentAbsentWriter.newLine();
                 }
+            }
+            for (List<String> row : PA) {
+                presentAbsentWriter.write(String.join(",", row));
+                presentAbsentWriter.newLine();
             }
             /*
             SG2 should output a message to the screen announcing how many different species (names) were found
