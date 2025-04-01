@@ -1,5 +1,6 @@
-/out/
-/*.txt
-/*.csv
-/.idea/
-./SG2Project.iml
+# Ignore everything
+*
+
+# But not these files
+!*.java
+!.gitignore
