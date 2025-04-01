@@ -2,7 +2,7 @@
 Language: Java
 IDE: IntellJ, Visual Studio Code, netbeans
 - - - - - - - - - - - - - - - - - - - -
-Group: Randy Vo, Eric McMahon,  Joe Mugo 
+Group: Randy Vo, Eric McMahon,  Joe Mugo
 Date: 04/2/2025
 Class: CS 4500-001
 - - - - - - - - - - - - - - - - - - - -
@@ -64,7 +64,7 @@ public class Main {
         System.out.println("Press Enter to continue...");
         s.nextLine();
     }
-    
+
     // This function is for making sure that the file being inputed matches the correct format
     public static void validateInput(String fileUser, Scanner consoleScanner) throws IOException {
         while (true) {
@@ -77,9 +77,9 @@ public class Main {
                 if (!file.exists() || !file.isFile()) {
                     System.out.println("File not found. Please input another file:");
                 } else {
-                    
+
                     processCSV(file);
-                    return; 
+                    return;
                 }
             }
 
@@ -87,10 +87,10 @@ public class Main {
             fileUser = consoleScanner.nextLine();
         }
     }
-    
+
 
     public static boolean processCSV(File file) throws IOException {
-    
+
         // Used for keeping track of what line the program is reading
         int lineNumber = 1;
         int numSpecies = 0;
@@ -120,7 +120,7 @@ public class Main {
 
         //Reads file line by line
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-        
+
             String line = reader.readLine();
             char commaCheck = line.charAt(0);
             if (commaCheck != ',' || line == null) {
@@ -141,21 +141,21 @@ public class Main {
             speciesWriter.close();
             species.close();
             PA.add(List.of(speciesList));
-          
-            //Read the rest of the lines until the line is empty or null 
-            while ((line = reader.readLine()) != null) 
+
+            //Read the rest of the lines until the line is empty or null
+            while ((line = reader.readLine()) != null)
             {
                 lineNumber++;
                 List<String> lineHolder = new ArrayList<>();
                 double highestAbd = 0;
-                if (line.trim().isEmpty()) 
+                if (line.trim().isEmpty())
                 {
                     break;
                 }
-                
+
                 //splits line by commas
                 String[] dateList = line.split(",");
-                if (dateList.length > 0) 
+                if (dateList.length > 0)
                 {
                     //writes only date in DatedData
                     if (dateList[0].matches("^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$")) {
@@ -302,4 +302,3 @@ public class Main {
         return true;
     }
 }
-
