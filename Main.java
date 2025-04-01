@@ -22,6 +22,10 @@ Description: This Java program reads a CSV file provided by the user and extract
     - Converts positive numbers to '1' and zero to '0'.
     - Writes the converted data to a file named 'PresentAbsent.txt'.
 - - - - - - - - - - - - - - - - - - - -
+[Central Data Structures]
+    - ArrayList: resizable array
+    - HashMap: data structure that stores key-value pairs
+- - - - - - - - - - - - - - - - - - - -
 [Sources:]
    - BufferedWriter: https://www.programiz.com/java-programming/bufferedwriter, https://www.geeksforgeeks.org/io-bufferedwriter-class-methods-java/
    - BufferedReader: https://www.programiz.com/java-programming/bufferedreader, https://www.geeksforgeeks.org/bufferedreader-class-in-java/
@@ -37,7 +41,7 @@ Description: This Java program reads a CSV file provided by the user and extract
 1. Import all the java library below.
 2. Add ".CSV" file to the same root directory as the java program.
 3. Run the Java program using the following command:
-    'java SG2'
+    'java Main.java'
 or pressing the run button/green triangle above.
 4. Follow the on-screen instructions to enter the name of the CSV file.
 5. The program will process the CSV file and generate the output files:
@@ -65,11 +69,15 @@ public class Main {
         s.nextLine();
     }
 
-    // This function is for making sure that the file being inputed matches the correct format
+    /**
+     * Validates file being provided
+     *
+     * @param fileUser string that represents file name
+     * @param consoleScanner scanner object to real file
+     */
     public static void validateInput(String fileUser, Scanner consoleScanner) throws IOException {
         while (true) {
             fileUser = fileUser.trim();
-
             if (fileUser.length() < 4 || !fileUser.toLowerCase().endsWith(".csv")) {
                 System.out.println("Please input a valid CSV file name ending with .CSV");
             } else {
@@ -82,7 +90,6 @@ public class Main {
                     return;
                 }
             }
-
             // Ask for input again
             fileUser = consoleScanner.nextLine();
         }
@@ -100,20 +107,17 @@ public class Main {
         // PA Data Structure to hold PresentAbsent Data
         /*
         This data structure is a list of list,
-        the outer list holds another list that represents rows in PresentAbsent
+        the outer list holds another list that represents rows in PresentAbsent,
         the inside list holds each item in that row (date & numbers)
          */
         List<List<String>> PA = new ArrayList<>();
 
-
-        System.out.println(file.exists());
-        System.out.println(file.isFile());
         if (!file.exists() || !file.isFile()) {
             System.out.println("Error: File not found or incorrect directory.");
             return false;
         }
 
-        // BufferedWriters for DatedData, PresentAbsent and species
+        // BufferedWriters for DatedData, PresentAbsent and Species
         BufferedWriter speciesWriter = new BufferedWriter(new FileWriter("Species.txt"));
         BufferedWriter dateWriter = new BufferedWriter(new FileWriter("DatedData.txt"));
         BufferedWriter presentAbsentWriter = new BufferedWriter(new FileWriter("PresentAbsent.txt"));
@@ -234,7 +238,7 @@ public class Main {
                 presentAbsentWriter.newLine();
             }
             /*
-            SG2 should output a message to the screen announcing how many different species (names) were found
+            Output a message to the screen announcing how many different species (names) were found
             in the file, and how many different dates were found. The user should be prompted to push ENTER to
             continue the program
              */
@@ -246,11 +250,16 @@ public class Main {
         presentAbsentWriter.close();
 
         // Generate Report
+        /*
+        HashMap uses number state '0' or '1' as key to get unique values
+        When key does not exist, it is added to HashMap
+        When key exist, the date is added to the list associated to the key
+         */
         Map<String, List<String>> reportDate = new HashMap<>();
         int p = 0;
         for (List<String> row : PA) {
+            // skip species row
             if (p != 0) {
-                // skip species row
                 // key is numbers provided
                 StringBuilder key = new StringBuilder();
                 for (int r = 1; r < row.size(); r++) {
