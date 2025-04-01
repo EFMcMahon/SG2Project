@@ -226,31 +226,6 @@ public class Main {
                     // if numbers are valid then add to dates found count
                     numDates++;
                     PA.add(lineHolder);
-
-                    //List that stores converted values to 1's and 0's
-
-                    //TODO PresentAbsent portion needs to be reworked into the way that is being asked for in the project. It needs to be set as an array type data structure rather than written to the file immediately
-//                    List<String> presentAbsentList = new ArrayList<>();
-//                    // Adds values to the presentAbsentList based on corresponding data from the CSV
-//                    for (int i = 1; i < dateList.length; i++)
-//                    {
-//                        String value = dateList[i].trim();
-//                        if (!value.isEmpty() && Double.parseDouble(value) > 0)
-//                        {
-//                            double num = Double.parseDouble(value);
-//                            if (num > max)
-//                            {
-//                                max = num;
-//                            }
-//                            presentAbsentList.add(num != 0 ? "1" : "0");
-//                        } else if (Double.parseDouble(value) < 0) {
-//                            System.out.println("The file can not contain negative numbers.");
-//                            return false;
-//                        }
-//                    }
-//                    //joins values with commas and write to presentabsent
-//                    presentAbsentWriter.write(String.join(", ", presentAbsentList));
-//                    presentAbsentWriter.newLine();
                 }
             }
             presentAbsentWriter.write(",");
